@@ -3,6 +3,7 @@ import pandas as pd
 from ml_engineer_exam.prepare import load_data, DataPreprocessor, split_features_target
 from ml_engineer_exam.config import MLConfig
 from ml_engineer_exam.model.utils import HousingModel
+from loguru import logger
 
 
 def run_model(model: HousingModel, ml_config: MLConfig) -> tuple:
@@ -29,19 +30,22 @@ def run_model(model: HousingModel, ml_config: MLConfig) -> tuple:
         ('y_test.csv', y_test),
     ]
     for name, data in input_data:
-        print('Saving input data to:', ml_config.input_data_dir / name)
+        logger.info(f'Saving input data to: {ml_config.input_data_dir / name}')
         cur_data = data if isinstance(data, pd.DataFrame) else pd.DataFrame(data)
         cur_data.columns = X.columns.to_list() if name.startswith('X') else ['MedHouseVal']
         cur_data.to_csv(ml_config.input_data_dir / name, index=False, header=True)
 
     # Train model
+    logger.info("Training model...")
     model.train(X_train_scaled, y_train)
 
     # Evaluate
+    logger.info("Getting Model Evaluation metrics...")
     metrics = model.evaluate(X_test_scaled, y_test)
 
     # Save model
     if ml_config.model_path:
-        model.save(ml_config.model_path / '')
+        logger.info(f"Saving model to {ml_config.model_path}")
+        model.save(ml_config.model_path)
 
     return model, metrics

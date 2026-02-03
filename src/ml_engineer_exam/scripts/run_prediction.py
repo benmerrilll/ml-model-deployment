@@ -1,9 +1,10 @@
 from argparse import ArgumentParser
 import joblib
 import json
+import pandas as pd
 from ml_engineer_exam.prediction import run_prediction
 from ml_engineer_exam.config import MLConfig
-import pandas as pd
+from loguru import logger
 
 
 def main():
@@ -29,25 +30,28 @@ def main():
     model_name = args.model_name
 
     config = MLConfig(model_name=model_name)
-    data = json.loads(args.input_data)
+    input_info = json.loads(args.input_data)
+    data = pd.DataFrame([input_info])
 
     model = joblib.load(config.model_dir / f'{config.model_name}.joblib')
 
     scaler = joblib.load(config.model_dir / f'scaler.joblib') # Should be StandardScaler, not ndarray
+
+    logger.add(config.log_dir / f'{config.model_name}_prediction.log')
+
     preds = run_prediction(
         model=model,
         data=data,
         scaler=scaler,
     )
 
-    print("Predictions Complete!")
+    logger.info("Predictions Complete!")
 
     data['PredictedValue'] = preds[0]
 
-    (config.prediction_dir / f'predictions_{config.model_name}.json').write_text(json.dumps(data, indent=4))
+    data.to_json(config.prediction_dir / f'predictions_{config.model_name}.json', indent=4)
 
-    print(json.dumps(data))
-
+    logger.info(data.to_dict(orient='records')[0])
 
 
 if __name__ == '__main__':

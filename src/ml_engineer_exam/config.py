@@ -14,6 +14,9 @@ class MLConfig(BaseModel):
     data_dir: Path = root_path / f'data/{app_name}'
     data_dir.mkdir(parents=True, exist_ok=True)
 
+    log_dir: Path = root_path / f'log/{app_name}'
+    log_dir.mkdir(parents=True, exist_ok=True)
+
     input_data_dir: Path = data_dir / 'input_data'
     input_data_dir.mkdir(parents=True, exist_ok=True)
 

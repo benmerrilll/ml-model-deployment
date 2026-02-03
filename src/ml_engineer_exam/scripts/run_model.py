@@ -1,7 +1,10 @@
+import logging
 from argparse import ArgumentParser
 from ml_engineer_exam.model import run_model
 from ml_engineer_exam.config import MLConfig
 from ml_engineer_exam.model.utils import HousingModel
+from loguru import logger
+
 
 def main():
 
@@ -20,15 +23,17 @@ def main():
 
     housing_model = HousingModel(model_type=config.model_name)
 
+    logger.add(config.log_dir / f'{config.model_name}_training.log', rotation="10 MB")
+
     model, metrics = run_model(
         model=housing_model,
-        ml_config=config,
+        ml_config=config
     )
 
-    print("Model Training Complete!")
-    print(f"RMSE: {metrics['rmse']:.2f}")
-    print(f"MAE: {metrics['mae']:.2f}")
-    print(f"R² Score: {metrics['r2']:.4f}")
+    logger.info("Model Training Complete!")
+    logger.info(f"RMSE: {metrics['rmse']:.2f}")
+    logger.info(f"MAE: {metrics['mae']:.2f}")
+    logger.info(f"R² Score: {metrics['r2']:.4f}")
 
     return model, metrics
 

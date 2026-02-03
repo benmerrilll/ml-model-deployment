@@ -4,6 +4,7 @@ version = "0.2.0"
 description = "A sample project for ML engineering exam for Milliman IntelliScript."
 requires-python = ">=3.12"
 dependencies = [
+    "loguru>=0.7.3",
     "pandas>=3.0.0",
     "pydantic>=2.12.5",
     "scikit-learn>=1.8.0",
