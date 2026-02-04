@@ -33,9 +33,9 @@ def main():
     input_info = json.loads(args.input_data)
     data = pd.DataFrame([input_info])
 
-    model = joblib.load(config.model_dir / f'{config.model_name}.joblib')
+    model = joblib.load(config.model_path)
 
-    scaler = joblib.load(config.model_dir / f'scaler.joblib') # Should be StandardScaler, not ndarray
+    scaler = joblib.load(config.model_path.with_name('scaler.joblib'))
 
     logger.add(config.log_dir / f'{config.model_name}_prediction.log')
 
