@@ -41,7 +41,7 @@ The Milliman IntelliScript Machine Learning Engineer Exam.
 
   - Run Command
   ```shell
-  uv run run_model_training --model_type linear 
+  uv run run_model_training --model_type linear
   uv run run_prediction --model_name linear --input_data "{\"MedInc\": 1.6812, \"HouseAge\": 25.0, \"AveRooms\": 4.192200557103064, \"AveBedrms\": 1.0222841225626742, \"Population\": 1392.0, \"AveOccup\": 3.877437325905293, \"Latitude\": 36.06, \"Longitude\": -119.01}"
   ```
 
@@ -57,13 +57,13 @@ uv run pytest -v
 
 * Code review
 
-All code reviews should be attached to a merge request or equivalent in your version control system 
+All code reviews should be attached to a merge request or equivalent in your version control system
 (e.g. merge requests are called pull requests in bitbucket)
 
 * Other guidelines
 
 - Add doc strings (preferable restStructuredText)
-- Use an IDE like Pycharm, Visual Studio Code, 
+- Use an IDE like Pycharm, Visual Studio Code,
 - Follow PEP standards
 - Create new branches for any work that you do
 - Make sure to bump the project version
@@ -79,6 +79,6 @@ All code reviews should be attached to a merge request or equivalent in your ver
 The project dependencies are located in the pyproject.toml file.
 You can see them by running a pip command "pip show ml_engineer_exam" after installing the package via uv.
 
-* Repo owner or admin 
+* Repo owner or admin
 
 Contact nicholas.arquette@milliman.com
