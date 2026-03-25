@@ -1,10 +1,11 @@
-import joblib
 import json
+
+import joblib
 import pandas as pd
 from ml_engineer_exam.prediction import run_prediction
 
-def test_prediction(session_fixture):
 
+def test_prediction(session_fixture):
     """
     Test prediction function
     :param session_fixture:
@@ -13,11 +14,11 @@ def test_prediction(session_fixture):
         None
     """
 
-    model = joblib.load(session_fixture['model_path'])
+    model = joblib.load(session_fixture["model_path"])
 
-    scaler = joblib.load(session_fixture['model_path'].with_name('scaler.joblib'))
+    scaler = joblib.load(session_fixture["model_path"].with_name("scaler.joblib"))
 
-    input_info = json.loads(session_fixture['input_data'])
+    input_info = json.loads(session_fixture["input_data"])
 
     data = pd.DataFrame([input_info])
 
