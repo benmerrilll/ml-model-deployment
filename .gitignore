@@ -2,6 +2,10 @@
 __pycache__/
 *.py[codz]
 *$py.class
+data/input_data/*
+data/models/*.joblib
+data/predictions/*
+logs/*
 
 # C extensions
 *.so

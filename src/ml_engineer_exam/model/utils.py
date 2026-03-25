@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Literal
 
 import joblib
 import numpy as np
@@ -6,20 +7,17 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
+BASE_MODELS = {
+    "linear": LinearRegression(),
+    "ridge": Ridge(alpha=1.0),
+    "random_forest": RandomForestRegressor(n_estimators=100, random_state=42),
+}
+
 
 class HousingModel:
-    def __init__(self, model_type="linear"):
+    def __init__(self, model_type: Literal["linear", "ridge", "random_forest"] = "linear"):
         self.model_type = model_type
-        self.model = self._create_model()
-
-    def _create_model(self):
-        """Create model based on type."""
-        models = {
-            "linear": LinearRegression(),
-            "ridge": Ridge(alpha=1.0),
-            "random_forest": RandomForestRegressor(n_estimators=100, random_state=42),
-        }
-        return models.get(self.model_type, LinearRegression())
+        self.model = BASE_MODELS[model_type]
 
     def train(self, X_train, y_train):
         """Train the model."""

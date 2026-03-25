@@ -44,6 +44,57 @@ The Milliman IntelliScript Machine Learning Engineer Exam.
   uv run run_model_training --model_type linear
   uv run run_prediction --model_name linear --input_data "{\"MedInc\": 1.6812, \"HouseAge\": 25.0, \"AveRooms\": 4.192200557103064, \"AveBedrms\": 1.0222841225626742, \"Population\": 1392.0, \"AveOccup\": 3.877437325905293, \"Latitude\": 36.06, \"Longitude\": -119.01}"
   ```
+#### Run FastAPI App ####
+  Move into FastAPI directory
+  - `cd src/ml_engineer_exam/api`
+
+  Run the application
+  - uv run python -m app
+
+  There are two ways to test the API - either using swaggerAPI docs or using curl requests from another terminal
+  ##### SwaggerAPI
+  - Go to http://localhost:8080/docs in your browser
+
+  ##### Terminal Commands
+  - Health check
+  ```shell
+  curl -X 'GET' \
+  'http://localhost:8080/ping' \
+  -H 'accept: application/json'
+  ```
+  - Train Model
+    ```shell
+  curl -X 'POST' \
+  'http://localhost:8080/train' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "model_name": "linear"
+  }'
+  ```
+
+  - Predict
+    1. Use the JSON file directly with curl:
+  ```shell
+  curl -X POST http://localhost:8080/predict \
+    -H "Content-Type: application/json" \
+    -d @src/ml_engineer_exam/api/predict_request.json
+  ```
+
+  2. Call with minimal data (uses defaults):
+  ```shell
+  curl -X POST http://localhost:8080/predict \
+    -H "Content-Type: application/json" \
+    -d '{}'
+  ```
+
+  3. Override just what you need:
+  ```shell
+  curl -X POST http://localhost:8080/predict \
+    -H "Content-Type: application/json" \
+    -d '{"MedInc": 2.5, "model_name": "ridge"}'
+  ```
+
 
 ### Run Tests ###
 
@@ -69,7 +120,7 @@ All code reviews should be attached to a merge request or equivalent in your ver
 - Make sure to bump the project version
 
   ```bash
-  uv version --bump minor #patch or minor or major (0.0.1 or major.minor.patch)
+  cz bump MINOR #patch or minor or major (0.0.1 or major.minor.patch)
   ```
 
 ### Who do I talk to? ###

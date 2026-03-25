@@ -12,8 +12,8 @@ def main():
     argument_parser.add_argument(
         "-mn", "--model_name", type=str, default="linear", help="Type of model to train (linear, ridge, random_forest)"
     )
-
     args = argument_parser.parse_args()
+
     model_name = args.model_name
 
     config = MLConfig(model_name=model_name)

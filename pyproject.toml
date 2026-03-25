@@ -1,29 +1,32 @@
 [project]
 name = "ml-engineer-exam"
-version = "0.0.1"
+version = "0.1.0"
 description = "A sample project for ML engineering exam for Milliman IntelliScript."
 requires-python = ">=3.12"
 dependencies = [
     "commitizen==3.12.0",
+    "fastapi>=0.135.2",
     "loguru>=0.7.3",
     "pandas>=3.0.0",
     "pre-commit>=4.5.0",
     "pydantic>=2.12.5",
     "pyspark>=3.5.0,<4.0.0",
-    "pytest>=9.0.2",
     "ruff>=0.15.7",
     "scikit-learn>=1.8.0",
+    "uvicorn>=0.42.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=8.0.0",
+    "httpx>=0.27.0",
+    "pytest>=9.0.2",
     "pytest-cov>=4.1.0",
 ]
 
 [project.scripts]
 run_model_training = "ml_engineer_exam.scripts.run_model_training:main"
 run_prediction = "ml_engineer_exam.scripts.run_prediction:main"
+test = "pytest:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -39,25 +42,21 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 
 [tool.commitizen]
-name = "conventional_commits"
-tag_format = "v$version"
-version_scheme = "semver"
-version = "0.0.1"
-update_changelog_on_bump = true
-major_version_zero = true
+version = "0.1.0"
 version_files = [
     "pyproject.toml:version",
-    "src/__about__.py"  # Optional: update your app's internal version string
+    "src/ml_engineer_exam/api/app.py:version"
 ]
 
 [tool.ruff]
+line-length = 119
+
+[tool.ruff.lint]
 select = [
     "E", # pycodestyle
     "F", # pyflakes errors
     "W", # pyflakes warnings
-    "I", # isort
 ]
-line-length = 119
 ignore = [
     "E501", # line-length, handled by black
     "E712", # ignores changes from 'is' and '==' operators to allow dataframe ops
