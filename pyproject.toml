@@ -56,7 +56,6 @@ select = [
     "E", # pycodestyle
     "F", # pyflakes errors
     "W", # pyflakes warnings
-    "I", # isort
 ]
 ignore = [
     "E501", # line-length, handled by black
