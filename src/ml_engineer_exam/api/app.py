@@ -3,7 +3,7 @@ import pandas as pd
 import uvicorn
 from fastapi import FastAPI
 from loguru import logger
-from magnum import Magnum
+from mangum import Mangum
 from ml_engineer_exam.config import MLConfig
 from ml_engineer_exam.model import run_model
 from ml_engineer_exam.model.utils import HousingModel
@@ -12,8 +12,8 @@ from pydantic import BaseModel
 
 app = FastAPI(title="ML Housing Price Prediction API")
 
-# Wrap the FastAPI app with Magnum to make it compatible with AWS Lambda since it needs a hanlder
-handler = Magnum(app)
+# Wrap the FastAPI app with Mangum to make it compatible with AWS Lambda since it needs a hanlder
+handler = Mangum(app)
 
 
 class PredictionInput(BaseModel):
