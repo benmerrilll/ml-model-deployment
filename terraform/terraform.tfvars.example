@@ -1,0 +1,12 @@
+# Template for others to configure their AWS Environment
+# To use it, copy this file to terraform.tfvars and customize for your AWS account
+# terraform.tfvars is in the `.gitignore` so your values stay private
+
+aws_region   = "us-east-1"
+project_name = "ml-model-deployment"
+environment  = "prod"
+
+lambda_memory_size = 2048
+lambda_timeout     = 30
+
+ecr_image_tag = "latest"

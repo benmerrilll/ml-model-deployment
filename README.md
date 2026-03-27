@@ -44,14 +44,22 @@ The Milliman IntelliScript Machine Learning Engineer Exam.
   uv run run_model_training --model_type linear
   uv run run_prediction --model_name linear --input_data "{\"MedInc\": 1.6812, \"HouseAge\": 25.0, \"AveRooms\": 4.192200557103064, \"AveBedrms\": 1.0222841225626742, \"Population\": 1392.0, \"AveOccup\": 3.877437325905293, \"Latitude\": 36.06, \"Longitude\": -119.01}"
   ```
-#### Run FastAPI App ####
+#### Run App Locally ####
+##### Option 1: Use FastAPI #####
   Move into FastAPI directory
   - `cd src/ml_engineer_exam/api`
 
   Run the application
   - uv run python -m app
 
-  There are two ways to test the API - either using swaggerAPI docs or using curl requests from another terminal
+##### Option 2: Run Docker Container ###
+Here we assume that docker dameon is setup and both models and data are saved locally in the repo from either running pytest or setting up the fastapi app. To build and check your containerized API, run the following commands to build the image and deploy it:
+  1. ```docker build -t ml-engineer-test .```
+  2. ```docker run -d -p 8080:8080 --name api ml-engineer-test```
+
+Note: check your ports and make sure they're available using `docker ps -a`
+
+  Once you have the API up and running, you can access it through either using swaggerAPI docs or using curl requests
   ##### SwaggerAPI
   - Go to http://localhost:8080/docs in your browser
 
@@ -81,20 +89,19 @@ The Milliman IntelliScript Machine Learning Engineer Exam.
     -d @src/ml_engineer_exam/api/predict_request.json
   ```
 
-  2. Call with minimal data (uses defaults):
+    2. Call with minimal data (uses defaults):
   ```shell
   curl -X POST http://localhost:8080/predict \
     -H "Content-Type: application/json" \
     -d '{}'
   ```
 
-  3. Override just what you need:
+    3. Override just what you need:
   ```shell
   curl -X POST http://localhost:8080/predict \
     -H "Content-Type: application/json" \
     -d '{"MedInc": 2.5, "model_name": "ridge"}'
   ```
-
 
 ### Run Tests ###
 
@@ -103,6 +110,20 @@ The Milliman IntelliScript Machine Learning Engineer Exam.
 ```shell
 uv run pytest -v
 ```
+
+### Deploying to AWS Lambda and API Gateway ###
+Prerequisites:
+1) AWS CLI installed and configured for cloud connection
+2) Terraform and Docker installed
+3) Models trained locally in data/models/ directory
+
+Test the terraform on your machine:
+```cd terraform```
+```terraform init```
+```terraform plan```
+TODO: Finish terraform here
+
+
 
 ### Contribution guidelines ###
 

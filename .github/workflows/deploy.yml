@@ -1,0 +1,33 @@
+# # This is an initial scaffolder - todo, finish this GHA and don't use secrets
+# name: Deploy to AWS
+
+# on:
+# push:
+#     branches: [main]
+
+# permissions:
+# id-token: write
+# contents: read
+
+# env:
+# AWS_REGION: us-east-1
+
+# jobs:
+# deploy:
+#     runs-on: ubuntu-latest
+#     environment: production  # Requires approval
+
+#     steps:
+#     - uses: actions/checkout@v4
+
+#     - name: Configure AWS Credentials (OIDC)
+#         uses: aws-actions/configure-aws-credentials@v4
+#         with:
+#         role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+#         aws-region: ${{ env.AWS_REGION }}
+
+#     - name: Build and push Docker image
+#         # ECR repository is in YOUR account
+
+#     - name: Deploy with Terraform
+#         # Uses YOUR account from AWS credentials

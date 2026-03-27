@@ -209,3 +209,11 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+# Terraform files to ignore
+.terraform/
+.terraform.lock.hcl
+
+# Variable file with personal setup vars
+terraform.tfvars

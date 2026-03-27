@@ -12,3 +12,8 @@ Questions
 - I bypassed the scripts folder and pulled that code into the `app.py` file to have health check, train, and predict all in the same file for a single API deployment
 - Error handling, what if the model is not there? What if the container breaks, how do we pass through 200s, 400s, and 500s to the user
 - To standardize the predictions, add max/min on prediction request variables, make sure that there are no nulls, and establish default variable values
+
+- Add cloudwatch logs
+- Add policy for image lifecycle, i.e. spin up and spin down images
+- Integrate with other system teams
+- Set up atlantis to plan and deploy on your github PRs
