@@ -10,7 +10,7 @@ from ml_engineer_exam.model.utils import HousingModel
 from ml_engineer_exam.prediction import run_prediction
 from pydantic import BaseModel
 
-app = FastAPI(title="ML Housing Price Prediction API", version="0.1.0")
+app = FastAPI(title="ML Housing Price Prediction API")
 
 # Wrap the FastAPI app with Magnum to make it compatible with AWS Lambda since it needs a hanlder
 handler = Magnum(app)

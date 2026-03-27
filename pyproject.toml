@@ -1,10 +1,9 @@
 [project]
 name = "ml-engineer-exam"
-version = "0.1.0"
+version = "0.2.0"
 description = "A sample project for ML engineering exam for Milliman IntelliScript."
 requires-python = ">=3.12"
 dependencies = [
-    "commitizen==3.12.0",
     "fastapi>=0.135.2",
     "loguru>=0.7.3",
     "magnum>=21.0.1",
@@ -41,13 +40,6 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-
-[tool.commitizen]
-version = "0.1.0"
-version_files = [
-    "pyproject.toml:version",
-    "src/ml_engineer_exam/api/app.py:version"
-]
 
 [tool.ruff]
 line-length = 119
