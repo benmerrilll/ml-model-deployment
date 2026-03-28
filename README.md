@@ -104,7 +104,7 @@ There are 4 ways to run the code in this repository
 
 #### 3. Manually Deploying to AWS Lambda and API Gateway ####
 Prerequisites:
-1) AWS CLI installed and configured with policies for IAM, ECR, Lambda, and API Gateway
+1) AWS CLI installed and configured with policies for IAM, ECR, Lambda, and API Gateway. Update the IAM in terraform to point to your forked repository.
 2) Terraform and Docker installed
 3) Models trained locally in data/models/ directory
 
