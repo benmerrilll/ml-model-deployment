@@ -217,3 +217,5 @@ __marimo__/
 
 # Variable file with personal setup vars
 terraform.tfvars
+terraform.tfstate
+terraform.tfstate.*

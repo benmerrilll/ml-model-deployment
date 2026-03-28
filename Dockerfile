@@ -6,11 +6,12 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 WORKDIR /app
 
 COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-install-project --no-dev
+RUN uv sync --frozen --no-install-project --no-dev && uv pip install awslambdaric
 
 COPY src/ ./src/
-COPY data/ ./data/models/
+COPY data/models/ ./data/models/
 
-EXPOSE 8080
+ENV PYTHONPATH=/app/src
 
-ENTRYPOINT ["uv", "run", "uvicorn", "ml_engineer_exam.api.app:app", "--host", "0.0.0.0", "--port", "8080"]
+ENTRYPOINT ["/app/.venv/bin/python", "-m", "awslambdaric"]
+CMD ["ml_engineer_exam.api.app.handler"]
