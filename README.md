@@ -34,36 +34,42 @@ The Milliman IntelliScript Machine Learning Engineer Exam.
 
 - Clone Repo (in IDE)
 - Setup UV Environment
+  ```shell
+  uv sync
+  ```
 
-### How to run ###
+### Code Tests ###
+Code testing lives in the `tests` folder at the root directory. Add any tests here and run the following code to test.
 
-#### Run scripts ####
+```shell
+uv run pytest -v
+```
+
+## Running Code ##
+There are 4 ways to run the code in this repository
+1. Run the scripts manually
+2. Run the app using FastAPI locally
+3. Manually deploying the container and models to AWS
+4. GHA deploy of the container through the API Gateway
+
+#### 1. Run Scripts Manually ####
 
   - Run Command
   ```shell
   uv run run_model_training --model_type linear
   uv run run_prediction --model_name linear --input_data "{\"MedInc\": 1.6812, \"HouseAge\": 25.0, \"AveRooms\": 4.192200557103064, \"AveBedrms\": 1.0222841225626742, \"Population\": 1392.0, \"AveOccup\": 3.877437325905293, \"Latitude\": 36.06, \"Longitude\": -119.01}"
   ```
-#### Run App Locally ####
-##### Option 1: Use FastAPI #####
+#### 2. Run App Locally Using FastAPI ####
   Move into FastAPI directory
   - `cd src/ml_engineer_exam/api`
 
   Run the application
-  - uv run python -m app
+  - `uv run python -m app`
 
-##### Option 2: Run Docker Container ###
-Here we assume that docker dameon is setup and both models and data are saved locally in the repo from either running pytest or setting up the fastapi app. To build and check your containerized API, run the following commands to build the image and deploy it:
-  1. ```docker build -t ml-engineer-test .```
-  2. ```docker run -d -p 8080:8080 --name api ml-engineer-test```
-
-Note: check your ports and make sure they're available using `docker ps -a`
-
-  Once you have the API up and running, you can access it through either using swaggerAPI docs or using curl requests
-  ##### SwaggerAPI
+  ##### Access FastAPI through SwaggerAPI
   - Go to http://localhost:8080/docs in your browser
 
-  ##### Terminal Commands
+  ##### Access API using Terminal Commands to Check
   - Health check
   ```shell
   curl -X 'GET' \
@@ -89,40 +95,73 @@ Note: check your ports and make sure they're available using `docker ps -a`
     -d @src/ml_engineer_exam/api/predict_request.json
   ```
 
-    2. Call with minimal data (uses defaults):
-  ```shell
-  curl -X POST http://localhost:8080/predict \
-    -H "Content-Type: application/json" \
-    -d '{}'
-  ```
-
-    3. Override just what you need:
+    2. Override just what you need (note that defaults live in `src/ml_engineer_exam/api/app.py`):
   ```shell
   curl -X POST http://localhost:8080/predict \
     -H "Content-Type: application/json" \
     -d '{"MedInc": 2.5, "model_name": "ridge"}'
   ```
 
-### Run Tests ###
-
-#### Run Unit Tests For Chart Summary ####
-
-```shell
-uv run pytest -v
-```
-
-### Deploying to AWS Lambda and API Gateway ###
+#### 3. Manually Deploying to AWS Lambda and API Gateway ####
 Prerequisites:
-1) AWS CLI installed and configured for cloud connection
+1) AWS CLI installed and configured with policies for IAM, ECR, Lambda, and API Gateway
 2) Terraform and Docker installed
 3) Models trained locally in data/models/ directory
 
-Test the terraform on your machine:
+Rebuild the docker container for AWS-compatible linux
+```docker buildx build --platform linux/amd64 --provenance=false -t ml-model-deployment:v1 .```
+
+Test and validate infrastructure on your machine:
 ```cd terraform```
 ```terraform init```
+```terraform validate```
 ```terraform plan```
-TODO: Finish terraform here
 
+Set up ECR Repository that you can push the Docker Container to:
+```terraform apply -target=aws_ecr_repository.housing_model```
+
+This will output an ECR Repository URL - save this in an environment variable:
+```export ECR_URL=<YOUR_URL_HERE>```
+```aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_URL```
+
+Tag and push the image to ECR:
+```cd ..```
+```docker tag ml-model-deployment:v1 ${ECR_URL}:v1```
+```docker push ${ECR_URL}:v1```
+
+Build the IAM, Lambda, API Gateway, and ECR instance:
+```cd terraform```
+```terraform apply```
+
+You should see a message `Apply complete! Resources: 5 added, 0 changed, 0 destroyed.`
+
+##### Testing Your API GATEWAY #####
+Use the `api_gateway_url` output from your terraform apply:
+```export API_GATEWAY_URL=<your_url_here>```
+
+Ping the endpoint for a health check:
+```curl $API_GATEWAY_URL/ping```
+
+Make a prediction:
+```shell
+curl -X POST $API_GATEWAY_URL/predict \
+  -H "Content-Type: application/json" \
+  -d '{"model_name": "linear", "MedInc": 2.5}'
+```
+
+#### 4. Deploy via GitHub Actions ####
+Prerequisites:
+1) Completed step 3 at least once to provision AWS infrastructure
+2) Your own GitHub repo forked from this one with GHA enabled
+3) GitHub `production` environment configured with yourself as a required reviewer under Settings → Environments → production. This prevents others from making changes to your repo and accessing your cloud resources
+
+After `terraform apply`, save the following as repository variables in your GitHub repo under Settings → Secrets and variables → Actions → Variables so that the `deploy.yml` script can read your secrets:
+
+`ECR_REGISTRY`, `123.dkr.ecr.us-east-1.amazonaws.com`
+`ECR_REPOSITORY`, ``
+`AWS_ROLE_ARN`, ``
+
+Pushes to `main` will trigger the deploy workflow and wait for approval before running.
 
 
 ### Contribution guidelines ###
@@ -154,3 +193,4 @@ You can see them by running a pip command "pip show ml_engineer_exam" after inst
 * Repo owner or admin
 
 Contact nicholas.arquette@milliman.com
+API and cloud infra developer ben.s.merrill@gmail.com

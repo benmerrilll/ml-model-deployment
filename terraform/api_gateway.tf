@@ -19,7 +19,7 @@ resource "aws_apigatewayv2_route" "ping" {
 
 resource "aws_apigatewayv2_route" "predict" {
     api_id    = aws_apigatewayv2_api.ml_api.id
-    route_key = "GET /predict"
+    route_key = "POST /predict"
     target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
 }
 

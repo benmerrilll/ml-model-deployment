@@ -17,3 +17,7 @@ Questions
 - Add policy for image lifecycle, i.e. spin up and spin down images
 - Integrate with other system teams
 - Set up atlantis to plan and deploy on your github PRs
+- Create image deletion script for only 3 versions or so
+- All of the terraform is previously built locally. Combine steps 3 and 4 to run terraform apply in the GHA and provision ECR (make notes of steps to change here)
+- Initially I had written a dockerfile for testing locally. I overwrote this with AWS-compatible Dockerfile. Potentially could have 2 DockerFiles here
+- I initially made an IAM role with permissions in the Console, but then used that role to generate the terraform for added in PR3
