@@ -163,6 +163,27 @@ After `terraform apply`, save the following as repository variables in your GitH
 
 Pushes to `main` will trigger the deploy workflow and wait for approval before running.
 
+## Notes from Ben ##
+API specific next steps
+- Standardize predictions using pydantic, add max/min on prediction request variables, make sure that there are no nulls, and establish default variable values and error handling
+- Build datacapture to track user inputs to the API to use for model training
+- Build API performance analytics in Datadog
+- Work with product to see how this API fits in with other system teams
+- Initially I had written a dockerfile for testing locally. I overwrote this with AWS-compatible Dockerfile. Rewrite the original local DockerFile and have a dockerfiles folder
+
+Infrastructure next steps
+- Add policies for image lifecycle, i.e. spin down images 2 days old or spin down the oldest image when more than 3 have been deployed
+- Set up atlantis to plan and deploy on github PRs, allowing for terraform applying and planning on Github
+- Add more formatting around cloudwatch logs and handling
+- Write all of the locally run terraform to . Combine steps 3 and 4 of "Running the code" to run terraform apply in the GHA and provision ECR
+
+Repo design ideas
+- Increase pytest rigorour around the rest of the package. i.e. what if there is no model in the container? What if the container breaks? How do we pass through useful 200s, 400s, and 500s to the user through the API?
+- Split the `run_model` function into 3 different API calls - `/get_data`, `/train_model` and `/evaluate_model`
+- Consolidate one-line functions into larger more modular functions
+- Decide where functional vs OOP design fits in here (my take is functional if it's only being run in one place)
+- Move these runner functions out of the init files
+- Potentially un-abbreviate variable names to make it easier for future readers, i.e. id could be identification, primary key, input data
 
 ### Contribution guidelines ###
 
