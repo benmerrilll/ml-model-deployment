@@ -155,13 +155,14 @@ Prerequisites:
 2) Your own GitHub repo forked from this one with GHA enabled
 3) GitHub `production` environment configured with yourself as a required reviewer under Settings → Environments → production. This prevents others from making changes to your repo and accessing your cloud resources
 
+
 After `terraform apply`, save the following as repository variables in your GitHub repo under Settings → Secrets and variables → Actions → Variables so that the `deploy.yml` script can read your secrets:
 
 `ECR_REGISTRY`, `123.dkr.ecr.us-east-1.amazonaws.com`
-`ECR_REPOSITORY`, ``
-`AWS_ROLE_ARN`, ``
+`ECR_REPOSITORY`, `123.dkr.ecr.us-east-1.amazonaws.com/my-ml-model`
+`AWS_ROLE_ARN`, `arn:aws:iam::123:role/GitHubActionsDeployRole`
 
-Pushes to `main` will trigger the deploy workflow and wait for approval before running.
+Pushes to `main` will trigger the deploy workflow and wait for approval before running. Go into "Actions" in Github to approve the production deployment.
 
 ## Notes from Ben ##
 API specific next steps
