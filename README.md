@@ -180,7 +180,7 @@ All code reviews should be attached to a merge request or equivalent in your ver
 - Make sure to bump the project version
 
   ```bash
-  cz bump MINOR #patch or minor or major (0.0.1 or major.minor.patch)
+  uv version --bump minor #patch or minor or major
   ```
 
 ### Who do I talk to? ###
